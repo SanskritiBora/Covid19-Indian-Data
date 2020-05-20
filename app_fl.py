@@ -282,10 +282,10 @@ dash_app2.layout = html.Div([html.H1('Hi there, I am app2 for reports')])
 
 
 
-# @server.route('/')
-# @server.route('/hello')
-# def hello():
-#     return 'hello world!'
+@server.route('/')
+@server.route('/hello')
+def hello():
+    return flask.redirect('/dashboard')
 
 @server.route('/dashboard')
 def render_dashboard():
@@ -302,4 +302,4 @@ app = DispatcherMiddleware(server, {
     
 })
 
-run_simple('0.0.0.0', 5000, app, use_reloader=True, use_debugger=True)
+run_simple('127.0.0.1', 5000, app, use_reloader=True, use_debugger=True,)
