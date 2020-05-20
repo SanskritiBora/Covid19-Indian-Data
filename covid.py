@@ -61,7 +61,7 @@ def scrape_1():
 "Total_confirmed_cases",
 "Cured_Discharged_Migrated",
 "Deaths"])
-
+    df=df.iloc[0:33,]
     #New column for active cases in the States 
     df["Active_cases"]=df["Total_confirmed_cases"]-df["Cured_Discharged_Migrated"]-df["Deaths"]
     df2=df.sort_values("Total_confirmed_cases",ascending=False)

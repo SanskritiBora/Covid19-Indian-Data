@@ -21,7 +21,6 @@ import dash_bootstrap_components as dbc
 from covid import scrape_1,scrape_2,scrape_3,Active_sort
 
 
-
 external_stylesheets = [dbc.themes.SKETCHY]
 
 colors={
@@ -38,15 +37,15 @@ fig6 = px.bar(df6, x="Date", y="Tests", title='<b>Number of Tests Performed Sinc
 
 
 fig = go.Figure([go.Bar(name="Total confirmed Cases",
-                        x=df2['State'][0:15],
+                        x=df2['State'][0:14],
                         y=df2['Total_confirmed_cases'],
                         marker_color='indianred'),
                 go.Bar(name="Cured/Discharged",
-                        x=df2['State'][0:15], 
+                        x=df2['State'][0:14], 
                         y=df2["Cured_Discharged_Migrated"],
                     marker_color='lightsalmon'),
                 go.Bar(name="Deaths",
-                        x=df2['State'][0:15], 
+                        x=df2['State'][0:14], 
                         y=df2["Deaths"],
                     marker_color='red')
                 ])
@@ -166,7 +165,19 @@ dash_app1.layout = html.Div([
                 'backgroundColor':colors['area']
            }),
     ]),
+    #   html.Div(
+    #      generate_table(df2)),
 
+    html.Div([
+        html.P("Real time Updates in the States")
+    ],style={
+               'textAlign':'center',
+               'color':'black',
+                'font' : 'bold',
+                'backgroundColor':colors['area'],
+                'font-size':'30px'
+                }
+                ),
     
     html.Div([
     dcc.Graph(figure=fig)
@@ -234,10 +245,10 @@ dash_app1.layout = html.Div([
                          go.Pie(values=df2['Total_confirmed_cases'][0:7],
                                labels=df2['State'][0:7])
                      ],
-                     'layout': go.Layout(title="Total Cases",autosize=True)
+                     'layout': go.Layout(title="<b>Total Cases</b>",autosize=True)
                  }),
     ],className="six columns", style={
-        'backgroundColor':colors['area'],'margin':'15px',"border":"2px black solid",
+        'backgroundColor':colors['area'],'margin':'15px',"border":"2px black solid"
     }),
         
         html.Div([
@@ -248,7 +259,7 @@ dash_app1.layout = html.Div([
                          go.Pie(values=df2["Deaths"][0:7],
                                labels=df2['State'][0:7])
                      ],
-                     'layout': go.Layout(title="Deaths",autosize=True)
+                     'layout': go.Layout(title="<b>Deaths</b>",autosize=True)
                  }),
         ],className="six columns",style={
         'backgroundColor':colors['area'],'margin':'15px','border':'2px',"border":"2px black solid",
@@ -264,8 +275,7 @@ dash_app1.layout = html.Div([
 
     
    
-    #  html.Div(
-    #      generate_table(df2)),
+   
     
     
     
@@ -302,4 +312,7 @@ app = DispatcherMiddleware(server, {
     
 })
 
-run_simple('127.0.0.1', 5000, app, use_reloader=True, use_debugger=True,)
+if __name__ == '__main__':
+    app.run_server()
+
+#run_simple('127.0.0.1', 5000, app, use_reloader=True, use_debugger=True,)
