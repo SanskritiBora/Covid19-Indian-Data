@@ -24,7 +24,7 @@ from covid import scrape_1,scrape_2,scrape_3,Active_sort
 external_stylesheets = [dbc.themes.COSMO]
 
 colors={
-    'area':'#c3cfc2'
+    'area':'lightgrey'
 }
 df2=pd.DataFrame()
 df2=scrape_1()
@@ -136,8 +136,8 @@ card_content3 = [
 #     ),
 # ]
 fig9 = go.Figure(data=[go.Table(header=dict(values=['State','Total Cases', 'Deaths', 'Active Cases'],
-fill_color='lightgrey'),
-                 cells=dict(values=[df2["State"],df2["Total_confirmed_cases"],df2["Cured_Discharged_Migrated"],df2["Active_cases"]],height=50))
+fill_color='lightgrey',font_size=20,height=50),
+                 cells=dict(values=[df2["State"],df2["Total_confirmed_cases"],df2["Cured_Discharged_Migrated"],df2["Active_cases"]],height=50,font_size=18))
                      ])
 
 
@@ -165,9 +165,9 @@ dash_app1.layout = html.Div([
     html.Div([
     dbc.Row(
     [
-        dbc.Col(dbc.Card(card_content1,  outline=True,style={'backgroundColor':"lightblue","border":"2px black solid",'color':'black','fontWeight':'bold',})),
-        dbc.Col(dbc.Card(card_content2, color="blue", outline=True,style={'backgroundColor':"lightgreen","border":"2px black solid",'color':'black','fontWeight':'bold',})),
-        dbc.Col(dbc.Card(card_content3, color="info", outline=True,style={'backgroundColor':"lightsalmon","border":"2px black solid",'color':'black','fontWeight':'bold',})),
+        dbc.Col(dbc.Card(card_content1,  outline=True,style={'backgroundColor':"lightblue","border":"2px black solid",'color':'black','fontWeight':'bold','font-size':'26px'})),
+        dbc.Col(dbc.Card(card_content2, color="blue", outline=True,style={'backgroundColor':"lightgreen","border":"2px black solid",'color':'black','fontWeight':'bold','font-size':'26px'})),
+        dbc.Col(dbc.Card(card_content3, color="info", outline=True,style={'backgroundColor':"lightsalmon","border":"2px black solid",'color':'black','fontWeight':'bold','font-size':'26px'})),
     ],className="mb-4", style={
                'textAlign':'center',
                'color':'grey',
@@ -181,7 +181,7 @@ dash_app1.layout = html.Div([
 "Most people infected with the COVID-19 virus will experience mild to moderate respiratory illness and recover without "+
 "requiring special treatment.  Older people, and those with underlying medical "+ 
 "problems like cardiovascular disease, diabetes, chronic respiratory disease, and cancer are more likely to develop serious illness.")
-    ],style={'color':'black'}),
+    ],style={'color':'black','font-size':'26px'}),
     #   html.Div(
     #      generate_table(df2)),
     html.Div([
@@ -220,7 +220,7 @@ dash_app1.layout = html.Div([
        " A majority of the coronavirus (COVID-19) cases in India affected people between ages 19.5 and 49.5. Of these, the age "+
        "group between 20 and 29 years old were most affected . This trend was significantly lower when compared to findings from other countries. However, compared to many western countries,"+
        " India also had a younger population directly affecting the proportion of COVID-19 cases.")
-   ],style={'color':'black'}),
+   ],style={'color':'black','font-size':'26px'}),
     html.Br(),
 
     html.Div([
@@ -243,8 +243,8 @@ dash_app1.layout = html.Div([
 
    html.Div([
        html.P("The first case of Corona virus in India was observed to be on 30th January 2020. Since then there has been an "+
-       "additive growth in cases all accross the country")
-   ],style={'color':'black'}),
+       "additive growth in cases all accross the country.")
+   ],style={'color':'black','font-size':'26px'}),
     html.Br(),
 
     html.Div([
@@ -266,10 +266,10 @@ dash_app1.layout = html.Div([
     
 
    html.Div([
-       html.P("Testing for Covid-19 has increased fivefold since April 1, when the cumulative number "+
-       "of people tested was 38,914, and daily testing is expected to cross 100,000 tests a day, from 5,580 a day on April 1. Covid-19 is diagnosed using Reverse Transcription Polymerase Chain Reaction (RT-PCR) assay, "+
+       html.P("Testing for Covid-19 has increased in the country gradually. On an average, around 15 lakh samples are being tested."+
+       " Covid-19 is diagnosed using Reverse Transcription Polymerase Chain Reaction (RT-PCR) assay, "+
        "which is the only diagnostic test for Covid-19 approved by the World Health Organization. ")
-   ],style={'color':'black'}),
+   ],style={'color':'black','font-size':'26px'}),
     html.Br(),
     
 
@@ -304,7 +304,7 @@ dash_app1.layout = html.Div([
 
    html.Div([
        html.P(df3['State'][0]+", "+df3['State'][1]+"and " +df3['State'][2]+" are some of the states in Green Zone. The effect of Covid-19 is observed to be very less in these States")
-   ],style={'color':'black'}),
+   ],style={'color':'black','font-size':'26px'}),
     html.Br(),
 
     #  html.Div([
@@ -371,7 +371,7 @@ dash_app1.layout = html.Div([
          html.P("Maximum number of deaths have been observed in "+df2['State'][0]+". The worst affected cities here are Mumbai and Pune."+
          " A lot of arrangements for beds have to be made in order to occupy the new cases emerging.")
         ],style={
-            'color':'black'
+            'color':'black','font-size':'26px'
         }),
  
 
