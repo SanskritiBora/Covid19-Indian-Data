@@ -21,13 +21,19 @@ import dash_bootstrap_components as dbc
 from covid import scrape_1,scrape_2,scrape_3,Active_sort
 
 
-external_stylesheets = [dbc.themes.SKETCHY]
+external_stylesheets = [dbc.themes.COSMO]
 
 colors={
     'area':'#c3cfc2'
 }
-
+df2=pd.DataFrame()
 df2=scrape_1()
+#df2.sort_values("Total_confirmed_cases",ascending=False,inplace=True)
+df2=df2.reset_index(drop=True)
+df3=df2.sort_values("Active_cases",ascending=True)
+df3=df3.reset_index(drop=True)
+
+print(df2['State'][0])
 df5=scrape_2()
 df6=scrape_3()
 
@@ -37,15 +43,15 @@ fig6 = px.bar(df6, x="Date", y="Tests", title='<b>Number of Tests Performed Sinc
 
 
 fig = go.Figure([go.Bar(name="Total confirmed Cases",
-                        x=df2['State'][0:14],
+                        x=df2['State'][0:15],
                         y=df2['Total_confirmed_cases'],
                         marker_color='indianred'),
                 go.Bar(name="Cured/Discharged",
-                        x=df2['State'][0:14], 
+                        x=df2['State'][0:15], 
                         y=df2["Cured_Discharged_Migrated"],
                     marker_color='lightsalmon'),
                 go.Bar(name="Deaths",
-                        x=df2['State'][0:14], 
+                        x=df2['State'][0:15], 
                         y=df2["Deaths"],
                     marker_color='red')
                 ])
@@ -129,7 +135,10 @@ card_content3 = [
 #         ]
 #     ),
 # ]
-
+fig9 = go.Figure(data=[go.Table(header=dict(values=['State','Total Cases', 'Deaths', 'Active Cases'],
+fill_color='lightgrey'),
+                 cells=dict(values=[df2["State"],df2["Total_confirmed_cases"],df2["Cured_Discharged_Migrated"],df2["Active_cases"]],height=50))
+                     ])
 
 
 
@@ -140,13 +149,14 @@ server = flask.Flask(__name__)
 dash_app1 = Dash(__name__, server = server, url_base_pathname='/dashboard/',external_stylesheets=external_stylesheets )
 dash_app2 = Dash(__name__, server = server, url_base_pathname='/reports/')
 dash_app1.layout = html.Div([
-        html.H1(children='Statewise Distribution of Covid-19 in India',
+        html.H1(children=html.Strong("India Covid-19 Updates"),
            style={
                'textAlign':'center',
                'color':'black',
-               'font':'bold',
-               'fontsize':'10px',
-               'backgroundColor':colors['area']
+               'font-family':'Comic Sans MS',
+               'fontsize':'20px',
+               'backgroundColor':colors['area'],
+               'text-decoration':'underline'
 
            }),
 
@@ -155,9 +165,9 @@ dash_app1.layout = html.Div([
     html.Div([
     dbc.Row(
     [
-        dbc.Col(dbc.Card(card_content1,  outline=True,style={'backgroundColor':"lightblue"})),
-        dbc.Col(dbc.Card(card_content2, color="blue", outline=True,style={'backgroundColor':"lightgreen"})),
-        dbc.Col(dbc.Card(card_content3, color="info", outline=True,style={'backgroundColor':"lightsalmon"})),
+        dbc.Col(dbc.Card(card_content1,  outline=True,style={'backgroundColor':"lightblue","border":"2px black solid",'color':'black','fontWeight':'bold',})),
+        dbc.Col(dbc.Card(card_content2, color="blue", outline=True,style={'backgroundColor':"lightgreen","border":"2px black solid",'color':'black','fontWeight':'bold',})),
+        dbc.Col(dbc.Card(card_content3, color="info", outline=True,style={'backgroundColor':"lightsalmon","border":"2px black solid",'color':'black','fontWeight':'bold',})),
     ],className="mb-4", style={
                'textAlign':'center',
                'color':'grey',
@@ -165,60 +175,137 @@ dash_app1.layout = html.Div([
                 'backgroundColor':colors['area']
            }),
     ]),
-    #   html.Div(
-    #      generate_table(df2)),
 
     html.Div([
-        html.P("Real time Updates in the States")
+        html.P("Coronavirus disease (COVID-19) is an infectious disease caused by a newly discovered covid19 which is widespread all over the world. "+
+"Most people infected with the COVID-19 virus will experience mild to moderate respiratory illness and recover without "+
+"requiring special treatment.  Older people, and those with underlying medical "+ 
+"problems like cardiovascular disease, diabetes, chronic respiratory disease, and cancer are more likely to develop serious illness.")
+    ],style={'color':'black'}),
+    #   html.Div(
+    #      generate_table(df2)),
+    html.Div([
+    dcc.Graph(figure=fig9)
+    
+    ],style={"border":"2px black solid",
+    'backgroundColor':colors['area']}),
+
+    html.Br(),
+    html.Br(),
+
+    html.Div([
+        html.P("Top 15 States with Highest Cases in India")
     ],style={
                'textAlign':'center',
                'color':'black',
                 'font' : 'bold',
+                'text-decoration':'underline',
                 'backgroundColor':colors['area'],
                 'font-size':'30px'
                 }
                 ),
+
+    
     
     html.Div([
     dcc.Graph(figure=fig)
     
     ],style={"border":"2px black solid",
     'backgroundColor':colors['area']}),
+    html.Br(),
+    html.Br(),
 
-   
-
+   html.Div([
+       html.P(df2['State'][0]+" is the state having the highest number of confirmed cases amongst all the states in India."+
+       " A majority of the coronavirus (COVID-19) cases in India affected people between ages 19.5 and 49.5. Of these, the age "+
+       "group between 20 and 29 years old were most affected . This trend was significantly lower when compared to findings from other countries. However, compared to many western countries,"+
+       " India also had a younger population directly affecting the proportion of COVID-19 cases.")
+   ],style={'color':'black'}),
+    html.Br(),
 
     html.Div([
+        html.P("Datewise Growth in Cases since 2nd Feb")
+    ],style={
+               'textAlign':'center',
+               'color':'black',
+                'fontWeight' : 'bold',
+                'text-decoration':'underline',
+                'backgroundColor':colors['area'],
+                'font-size':'20px'
+                }),
     html.Div([
     dcc.Graph(figure=fig2)
     
-    ],style={"border":"2px black solid",'margin':'15px',
+    ],style={"border":"2px black solid",
     'backgroundColor':colors['area']},className="six columns"),
+    html.Br(),
+    
+
+   html.Div([
+       html.P("The first case of Corona virus in India was observed to be on 30th January 2020. Since then there has been an "+
+       "additive growth in cases all accross the country")
+   ],style={'color':'black'}),
+    html.Br(),
 
     html.Div([
+        html.P("Datewise Tests Performed in India since March ")
+    ],style={
+               'textAlign':'center',
+               'color':'black',
+                'fontWeight' : 'bold',
+                'text-decoration':'underline',
+                'backgroundColor':colors['area'],
+                'font-size':'20px'
+                }),
+    html.Div([
     dcc.Graph(figure=fig6)
-    
-    ],style={"border":"2px black solid",'margin':'15px',
+    ],style={"border":"2px black solid",
     'backgroundColor':colors['area']},className="six columns"),
 
-    ],className="row",),
+    html.Br(),
+    
 
+   html.Div([
+       html.P("Testing for Covid-19 has increased fivefold since April 1, when the cumulative number "+
+       "of people tested was 38,914, and daily testing is expected to cross 100,000 tests a day, from 5,580 a day on April 1. Covid-19 is diagnosed using Reverse Transcription Polymerase Chain Reaction (RT-PCR) assay, "+
+       "which is the only diagnostic test for Covid-19 approved by the World Health Organization. ")
+   ],style={'color':'black'}),
+    html.Br(),
+    
 
+    html.Div([
+        html.P("Top 10 States with Lowest Active Cases")
+    ],style={
+               'textAlign':'center',
+               'color':'black',
+                'fontWeight' : 'bold',
+                'text-decoration':'underline',
+                'backgroundColor':colors['area'],
+                'font-size':'20px'
+                }),
      html.Div([
         dcc.Graph(id='Active Cases',
                  figure={
                      'data': [
-                         go.Bar(x=df2['State'][0:29],
-                               y=df2["Active_cases"][0:29],
+                         go.Bar(x=df3['State'][5:15],
+                               y=df3["Active_cases"][5:15],
                                marker_color='lightsalmon')
                      ],
-                     'layout': go.Layout(title="<b>Active Cases in the States</b>",autosize=True)
+                     'layout': go.Layout(title="<b>Lowest Active Cases</b>",autosize=True)
                  })
         
     ],style={
         'backgroundColor':colors['area'],"border":"2px black solid"
         
     }),
+
+    html.Br(),
+    
+
+   html.Div([
+       html.P(df3['State'][0]+", "+df3['State'][1]+"and " +df3['State'][2]+" are some of the states in Green Zone. The effect of Covid-19 is observed to be very less in these States")
+   ],style={'color':'black'}),
+    html.Br(),
 
     #  html.Div([
     # dbc.Row(
@@ -237,40 +324,55 @@ dash_app1.layout = html.Div([
 
 
     
+    
+    # html.Div([
+    #     dcc.Graph(id='g1',
+    #              figure={
+    #                  'data': [
+    #                      go.Pie(values=df2['Total_confirmed_cases'][0:7],
+    #                            labels=df2['State'][0:7])
+    #                  ],
+    #                  'layout': go.Layout(title="<b>Total Cases</b>",autosize=True)
+    #              }),
+    # ],className="six columns", style={
+    #     'backgroundColor':colors['area'],'margin':'15px',"border":"2px black solid"
+    # }),
+
+    html.Br(),
+    
+
     html.Div([
-    html.Div([
-        dcc.Graph(id='g1',
-                 figure={
-                     'data': [
-                         go.Pie(values=df2['Total_confirmed_cases'][0:7],
-                               labels=df2['State'][0:7])
-                     ],
-                     'layout': go.Layout(title="<b>Total Cases</b>",autosize=True)
-                 }),
-    ],className="six columns", style={
-        'backgroundColor':colors['area'],'margin':'15px',"border":"2px black solid"
-    }),
+        html.P("Percentage of Deaths observed for top 20 States in India")
+    ],style={
+               'textAlign':'center',
+               'color':'black',
+                'fontWeight' : 'bold',
+                'fontUnderline':True,
+                'text-decoration':'underline',
+                'backgroundColor':colors['area'],
+                'font-size':'20px'
+                }),
         
         html.Div([
         
          dcc.Graph(id='g2',
                  figure={
                      'data': [
-                         go.Pie(values=df2["Deaths"][0:7],
-                               labels=df2['State'][0:7])
+                         go.Pie(values=df2["Deaths"][0:20],
+                               labels=df2['State'][0:20])
                      ],
                      'layout': go.Layout(title="<b>Deaths</b>",autosize=True)
                  }),
         ],className="six columns",style={
-        'backgroundColor':colors['area'],'margin':'15px','border':'2px',"border":"2px black solid",
+        'backgroundColor':colors['area'],'border':'2px',"border":"2px black solid",
     }),
-    ],className="row"),
-
     html.Br(),
-    html.Br(),
-
      html.Div([
-        ]),
+         html.P("Maximum number of deaths have been observed in "+df2['State'][0]+". The worst affected cities here are Mumbai and Pune."+
+         " A lot of arrangements for beds have to be made in order to occupy the new cases emerging.")
+        ],style={
+            'color':'black'
+        }),
  
 
     
