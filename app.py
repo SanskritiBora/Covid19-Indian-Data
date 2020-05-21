@@ -135,10 +135,10 @@ card_content3 = [
 #         ]
 #     ),
 # ]
-fig9 = go.Figure(data=[go.Table(header=dict(values=['State','Total Cases', 'Deaths', 'Active Cases'],
-fill_color='lightgrey',font_size=20,height=50),
-                 cells=dict(values=[df2["State"],df2["Total_confirmed_cases"],df2["Cured_Discharged_Migrated"],df2["Active_cases"]],height=50,font_size=18))
-                     ])
+# fig9 = go.Figure(data=[go.Table(header=dict(values=['State','Total Cases', 'Deaths', 'Active Cases'],
+# fill_color='lightgrey',font_size=20,height=50),
+#                  cells=dict(values=[df2["State"],df2["Total_confirmed_cases"],df2["Cured_Discharged_Migrated"],df2["Active_cases"]],height=50,font_size=18))
+#                     ,'min_height':400])
 
 
 
@@ -184,11 +184,23 @@ dash_app1.layout = html.Div([
     ],style={'color':'black','font-size':'26px'}),
     #   html.Div(
     #      generate_table(df2)),
+    html.Br(),
+    html.Br(),
     html.Div([
-    dcc.Graph(figure=fig9)
+    dash_table.DataTable(
+    data=df2.to_dict('records'),
+    columns=[{'id': c, 'name': c} for c in df2.columns],
+    fixed_rows={'headers': True},
+    style_table={'height': 800},
+     style_cell={
+        'textAlign':'center','maxWidth':50,'maxHeight':100,'font_size':'20px',
+    },
+    style_header={'backgroundColor':'lightblue','fontWeight':'bold'}
+)
     
     ],style={"border":"2px black solid",
-    'backgroundColor':colors['area']}),
+    'backgroundColor':colors['area'],
+                     }),
 
     html.Br(),
     html.Br(),
@@ -198,10 +210,10 @@ dash_app1.layout = html.Div([
     ],style={
                'textAlign':'center',
                'color':'black',
-                'font' : 'bold',
+                'fontWeight' : 'bold',
                 'text-decoration':'underline',
                 'backgroundColor':colors['area'],
-                'font-size':'30px'
+                'font-size':'20px'
                 }
                 ),
 
