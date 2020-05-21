@@ -53,17 +53,22 @@ def scrape_1():
             state.append(col[1].text.strip())
             total_confirmed_cases.append(int(col[2].text.strip()))
             cured_discharged_migrated.append(int(col[3].text.strip()))
-            deaths.append(int(col[4].text.strip()))
+            deaths.append((col[4].text.strip()))
         except:
             print("")
+
+    
 
     df=pd.DataFrame(list(zip(state,total_confirmed_cases,cured_discharged_migrated,deaths)),columns=["State",
 "Total_confirmed_cases",
 "Cured_Discharged_Migrated",
 "Deaths"])
-    df=df.iloc[0:33,]
+    df=df.iloc[0:33]
+    df.replace('0#','0',regex=True,inplace=True)
+    df["Deaths"] = df["Deaths"].astype(str).astype(int)
     #New column for active cases in the States 
     df["Active_cases"]=df["Total_confirmed_cases"]-df["Cured_Discharged_Migrated"]-df["Deaths"]
+    
     df2=df.sort_values("Total_confirmed_cases",ascending=False)
     return df2
 

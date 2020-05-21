@@ -32,8 +32,7 @@ df2=scrape_1()
 df2=df2.reset_index(drop=True)
 df3=df2.sort_values("Active_cases",ascending=True)
 df3=df3.reset_index(drop=True)
-
-print(df2['State'][0])
+#print(df2)
 df5=scrape_2()
 df6=scrape_3()
 
@@ -426,7 +425,7 @@ app = DispatcherMiddleware(server, {
     
 })
 
-if __name__ == '__main__':
-    app.run_server()
+# if __name__ == '__main__':
+#     app.run_server()
 
-#run_simple('127.0.0.1', 5000, app, use_reloader=True, use_debugger=True,)
+run_simple('127.0.0.1', 5000, app, use_reloader=True, use_debugger=True,)
