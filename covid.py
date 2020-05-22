@@ -70,6 +70,7 @@ def scrape_1():
     df["Active_cases"]=df["Total_confirmed_cases"]-df["Cured_Discharged_Migrated"]-df["Deaths"]
     
     df2=df.sort_values("Total_confirmed_cases",ascending=False)
+    df2=df2.reset_index(drop=True)
     return df2
 
 def scrape_2():
@@ -103,7 +104,16 @@ def scrape_3():
     return df6
 
 def Active_sort():
-    df=scrape_1()
-    df2=df.sort_values("Active_cases",ascending=False)
-    return df2
+    df3=scrape_1().sort_values("Active_cases",ascending=True)
+    df3=df3.reset_index(drop=True)
+    return df3
         
+def Line_plot1():
+    fig=px.line(scrape_2(), x="Date", y="Cases", title='<b>Number of Cases Since February</b>')
+    return fig
+
+
+
+def Line_plot2():
+    fig6 = px.bar(scrape_3(), x="Date", y="Tests", title='<b>Number of Tests Performed Since March</b>')
+    return fig6

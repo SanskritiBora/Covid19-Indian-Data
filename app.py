@@ -18,7 +18,7 @@ import plotly.graph_objs as go
 from dash.dependencies import Input, Output
 import plotly.express as px
 import dash_bootstrap_components as dbc
-from covid import scrape_1,scrape_2,scrape_3,Active_sort
+from covid import scrape_1,scrape_2,scrape_3,Active_sort,Line_plot1,Line_plot2
 
 
 external_stylesheets = [dbc.themes.COSMO]
@@ -26,39 +26,31 @@ external_stylesheets = [dbc.themes.COSMO]
 colors={
     'area':'lightgrey'
 }
-df2=pd.DataFrame()
-df2=scrape_1()
-#df2.sort_values("Total_confirmed_cases",ascending=False,inplace=True)
-df2=df2.reset_index(drop=True)
-df3=df2.sort_values("Active_cases",ascending=True)
-df3=df3.reset_index(drop=True)
-#print(df2)
-df5=scrape_2()
-df6=scrape_3()
 
 
 
-fig6 = px.bar(df6, x="Date", y="Tests", title='<b>Number of Tests Performed Since March</b>')
+
+#fig6 = px.bar(df6, x="Date", y="Tests", title='<b>Number of Tests Performed Since March</b>')
 
 
-fig = go.Figure([go.Bar(name="Total confirmed Cases",
-                        x=df2['State'][0:15],
-                        y=df2['Total_confirmed_cases'],
-                        marker_color='indianred'),
-                go.Bar(name="Cured/Discharged",
-                        x=df2['State'][0:15], 
-                        y=df2["Cured_Discharged_Migrated"],
-                    marker_color='lightsalmon'),
-                go.Bar(name="Deaths",
-                        x=df2['State'][0:15], 
-                        y=df2["Deaths"],
-                    marker_color='red')
-                ])
+# fig = go.Figure([go.Bar(name="Total confirmed Cases",
+#                         x=df2['State'][0:15],
+#                         y=df2['Total_confirmed_cases'],
+#                         marker_color='indianred'),
+#                 go.Bar(name="Cured/Discharged",
+#                         x=df2['State'][0:15], 
+#                         y=df2["Cured_Discharged_Migrated"],
+#                     marker_color='lightsalmon'),
+#                 go.Bar(name="Deaths",
+#                         x=df2['State'][0:15], 
+#                         y=df2["Deaths"],
+#                     marker_color='red')
+#                 ])
 
-fig.update_layout(barmode='group')
+# fig.update_layout(barmode='group')
 
 
-fig2 = px.line(df5, x="Date", y="Cases", title='<b>Number of Cases Since February</b>')
+#fig2 = px.line(df5, x="Date", y="Cases", title='<b>Number of Cases Since February</b>')
 
 
 
@@ -79,41 +71,46 @@ def generate_table(dataframe, max_rows=30):
 
 
 
-card_content1 = [
-    dbc.CardBody(
-        [
-            html.H5("Total Cases", className="card-title"),
+# card_content1 = [
+#     dbc.CardBody(
+#         [
             
-                df2["Total_confirmed_cases"].sum()
+            
 
-        ]
-    ),
-]
+#             html.H5("Total Cases", className="card-title"),
+            
+#                 df2["Total_confirmed_cases"].sum()
 
-card_content2 = [
+#         ]
+#     ),
+# ]
+
+# card_content2 = [
    
-    dbc.CardBody(
-        [
-            html.H5("Total Recovered", className="card-title"),
+#     dbc.CardBody(
+#         [
             
-                df2["Cured_Discharged_Migrated"].sum()
+#             html.H5("Total Recovered", className="card-title"),
+            
+#                 df2["Cured_Discharged_Migrated"].sum()
 
-        ]
-    ),
-]
+#         ]
+#     ),
+# ]
 
 
-card_content3 = [
+# card_content3 = [
    
-    dbc.CardBody(
-        [
-            html.H5("Total Deaths", className="card-title"),
+#     dbc.CardBody(
+#         [
+           
+#             html.H5("Total Deaths", className="card-title"),
             
-                df2["Deaths"].sum()
+#                 df2["Deaths"].sum()
 
-        ]
-    ),
-]
+#         ]
+#     ),
+# ]
 
 # card_content4 = [
    
@@ -162,11 +159,63 @@ dash_app1.layout = html.Div([
            html.Br(style={'backgroundColor':colors['area']}),
            html.Br(),
     html.Div([
+       
     dbc.Row(
     [
-        dbc.Col(dbc.Card(card_content1,  outline=True,style={'backgroundColor':"lightblue","border":"2px black solid",'color':'black','fontWeight':'bold','font-size':'26px'})),
-        dbc.Col(dbc.Card(card_content2, color="blue", outline=True,style={'backgroundColor':"lightgreen","border":"2px black solid",'color':'black','fontWeight':'bold','font-size':'26px'})),
-        dbc.Col(dbc.Card(card_content3, color="info", outline=True,style={'backgroundColor':"lightsalmon","border":"2px black solid",'color':'black','fontWeight':'bold','font-size':'26px'})),
+        dbc.Col(dbc.Card([
+    dbc.CardBody(
+        [
+            
+            
+
+            html.H5("Total Cases", className="card-title"),
+            
+                scrape_1()["Total_confirmed_cases"].sum()
+
+        ]
+    ),
+],
+        
+        
+        
+        
+        
+         outline=True,style={'backgroundColor':"lightblue","border":"2px black solid",'color':'black','fontWeight':'bold','font-size':'26px'})),
+        dbc.Col(dbc.Card([
+   
+    dbc.CardBody(
+        [
+            
+            html.H5("Total Recovered", className="card-title"),
+            
+                scrape_1()["Cured_Discharged_Migrated"].sum()
+
+        ]
+    ),
+], 
+        
+        
+        
+        
+        color="blue", outline=True,style={'backgroundColor':"lightgreen","border":"2px black solid",'color':'black','fontWeight':'bold','font-size':'26px'})),
+        dbc.Col(dbc.Card([
+   
+    dbc.CardBody(
+        [
+           
+            html.H5("Total Deaths", className="card-title"),
+            
+                scrape_1()["Deaths"].sum()
+
+        ]
+    ),
+], 
+        
+        
+        
+        
+        
+        color="info", outline=True,style={'backgroundColor':"lightsalmon","border":"2px black solid",'color':'black','fontWeight':'bold','font-size':'26px'})),
     ],className="mb-4", style={
                'textAlign':'center',
                'color':'grey',
@@ -186,9 +235,10 @@ dash_app1.layout = html.Div([
     html.Br(),
     html.Br(),
     html.Div([
+        
     dash_table.DataTable(
-    data=df2.to_dict('records'),
-    columns=[{'id': c, 'name': c} for c in df2.columns],
+    data=scrape_1().to_dict('records'),
+    columns=[{'id': c, 'name': c} for c in scrape_1().columns],
     fixed_rows={'headers': True},
     style_table={'height': 800},
      style_cell={
@@ -219,7 +269,25 @@ dash_app1.layout = html.Div([
     
     
     html.Div([
-    dcc.Graph(figure=fig)
+    # dcc.Graph(figure=fig)
+    dcc.Graph(id='Total Cases',
+                 figure={
+                     'data': [
+                go.Bar(name="Total confirmed Cases",
+                        x=scrape_1()['State'][0:15],
+                        y=scrape_1()['Total_confirmed_cases'],
+                        marker_color='indianred'),
+                go.Bar(name="Cured/Discharged",
+                        x=scrape_1()['State'][0:15], 
+                        y=scrape_1()["Cured_Discharged_Migrated"],
+                    marker_color='lightsalmon'),
+                go.Bar(name="Deaths",
+                        x=scrape_1()['State'][0:15], 
+                        y=scrape_1()["Deaths"],
+                    marker_color='red')
+                ],
+                'layout': go.Layout(title="<b>Total Cases in India</b>",autosize=True)
+                 })
     
     ],style={"border":"2px black solid",
     'backgroundColor':colors['area']}),
@@ -227,7 +295,7 @@ dash_app1.layout = html.Div([
     html.Br(),
 
    html.Div([
-       html.P(df2['State'][0]+" is the state having the highest number of confirmed cases amongst all the states in India."+
+       html.P(scrape_1()['State'][0]+" is the state having the highest number of confirmed cases amongst all the states in India."+
        " A majority of the coronavirus (COVID-19) cases in India affected people between ages 19.5 and 49.5. Of these, the age "+
        "group between 20 and 29 years old were most affected . This trend was significantly lower when compared to findings from other countries. However, compared to many western countries,"+
        " India also had a younger population directly affecting the proportion of COVID-19 cases.")
@@ -245,7 +313,8 @@ dash_app1.layout = html.Div([
                 'font-size':'20px'
                 }),
     html.Div([
-    dcc.Graph(figure=fig2)
+    dcc.Graph(figure=Line_plot1())
+    
     
     ],style={"border":"2px black solid",
     'backgroundColor':colors['area']},className="six columns"),
@@ -269,7 +338,7 @@ dash_app1.layout = html.Div([
                 'font-size':'20px'
                 }),
     html.Div([
-    dcc.Graph(figure=fig6)
+    dcc.Graph(figure=Line_plot2())
     ],style={"border":"2px black solid",
     'backgroundColor':colors['area']},className="six columns"),
 
@@ -298,8 +367,8 @@ dash_app1.layout = html.Div([
         dcc.Graph(id='Active Cases',
                  figure={
                      'data': [
-                         go.Bar(x=df3['State'][5:15],
-                               y=df3["Active_cases"][5:15],
+                         go.Bar(x=Active_sort()['State'][5:15],
+                               y=Active_sort()["Active_cases"][5:15],
                                marker_color='lightsalmon')
                      ],
                      'layout': go.Layout(title="<b>Lowest Active Cases</b>",autosize=True)
@@ -314,22 +383,22 @@ dash_app1.layout = html.Div([
     
 
    html.Div([
-       html.P(df3['State'][0]+", "+df3['State'][1]+"and " +df3['State'][2]+" are some of the states in Green Zone. The effect of Covid-19 is observed to be very less in these States")
+       html.P(Active_sort()['State'][0]+", "+Active_sort()['State'][1]+"and " +Active_sort()['State'][2]+" are some of the states in Green Zone. The effect of Covid-19 is observed to be very less in these States.")
    ],style={'color':'black','font-size':'26px'}),
     html.Br(),
 
-    #  html.Div([
-    # dbc.Row(
-    # [
-    #     dbc.Col(dbc.Card(card_content4, outline=False,style={'height':'30vh','width':'40vh','backgroundColor':"lightblue"}))
+#     #  html.Div([
+#     # dbc.Row(
+#     # [
+#     #     dbc.Col(dbc.Card(card_content4, outline=False,style={'height':'30vh','width':'40vh','backgroundColor':"lightblue"}))
         
-    # ],className="mb-4", style={
-    #            'textAlign':'center',
-    #            'color':'black',
-    #             'font' : 'bold',
-    #             'backgroundColor':'lavender'
-    #        }),
-    # ]),
+#     # ],className="mb-4", style={
+#     #            'textAlign':'center',
+#     #            'color':'black',
+#     #             'font' : 'bold',
+#     #             'backgroundColor':'lavender'
+#     #        }),
+#     # ]),
 
 
 
@@ -369,8 +438,8 @@ dash_app1.layout = html.Div([
          dcc.Graph(id='g2',
                  figure={
                      'data': [
-                         go.Pie(values=df2["Deaths"][0:20],
-                               labels=df2['State'][0:20])
+                         go.Pie(values=scrape_1()["Deaths"][0:20],
+                               labels=scrape_1()['State'][0:20])
                      ],
                      'layout': go.Layout(title="<b>Deaths</b>",autosize=True)
                  }),
@@ -379,7 +448,7 @@ dash_app1.layout = html.Div([
     }),
     html.Br(),
      html.Div([
-         html.P("Maximum number of deaths have been observed in "+df2['State'][0]+". The worst affected cities here are Mumbai and Pune."+
+         html.P("Maximum number of deaths have been observed in "+scrape_1()['State'][0]+". The worst affected cities here are Mumbai and Pune."+
          " A lot of arrangements for beds have to be made in order to occupy the new cases emerging.")
         ],style={
             'color':'black','font-size':'26px'
@@ -428,4 +497,4 @@ app = DispatcherMiddleware(server, {
 if __name__ == '__main__':
     app.run_server()
 
-#run_simple('127.0.0.1', 5000, app, use_reloader=True, use_debugger=True,)
+# run_simple('127.0.0.1', 5000, app, use_reloader=True, use_debugger=True,)
